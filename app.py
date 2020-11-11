@@ -1,5 +1,5 @@
 from flask import Flask, render_template, redirect, url_for
-from wtforms_fields import RegistrationForm
+from wtforms_fields import *
 from models import *
 
 app = Flask(__name__)
