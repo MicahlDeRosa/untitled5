@@ -1,6 +1,7 @@
-from flask import Flask, render_template, redirect, url_for
+from flask import Flask, render_template, redirect, url_for, flash
 from flask_login import LoginManager, login_user, current_user, login_required, logout_user
 from passlib.hash import pbkdf2_sha256
+
 from wtforms_fields import *
 from models import *
 
@@ -22,9 +23,6 @@ def load_user(id):
     User.query.get(int(id))
     return User.query.get(int(id))
 
-
-
-
 @app.route('/', methods=['GET', 'POST'])
 def index():
     reg_form = RegistrationForm()
@@ -39,6 +37,9 @@ def index():
         user = User(username=username, password=hashed_pswd)
         db.session.add(user)
         db.session.commit()
+
+        flash('Registered Successfully. Please login.', 'success')
+
         return redirect(url_for('login'))
 
     return render_template("index.html", form=reg_form)
@@ -60,7 +61,8 @@ def login():
 @app.route('/chat', methods=['GET', 'POST'])
 def chat():
     if not current_user.is_authenticated:
-        return "Please login before using chat"
+        flash('Please login', 'danger')
+        return redirect(url_for('login'))
 
 
     return "chat with me"
@@ -69,7 +71,8 @@ def chat():
 @app.route('/logout', methods=['GET'])
 def logout():
     logout_user()
-    return "logged out using flask-login "
+    flash('You have logged out successfully', 'success')
+    return redirect(url_for('login'))
 
 
 if __name__ == '__main__':
