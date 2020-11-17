@@ -1,4 +1,4 @@
-{% from 'form_helper.html' import displayField %}
+{% from 'field-macro.html' import displayField %}
 
 {% extends "prelogin-layout.html" %}
 
@@ -20,4 +20,7 @@
         {{ form.csrf_token }}
 
     </form>
+
+    <p>Already registered? <a href={{url_for('login')}}>Login here</a>.</p>
+
 {% endblock %}
