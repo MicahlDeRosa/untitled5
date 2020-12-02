@@ -1,3 +1,5 @@
+import os
+
 from time import localtime, strftime
 from flask import Flask, render_template, redirect, url_for, flash
 from flask_login import LoginManager, login_user, current_user, login_required, logout_user
@@ -8,11 +10,11 @@ from wtforms_fields import *
 from models import *
 
 app = Flask(__name__)
-app.secret_key = "replace later"
+app.secret_key = os.environ.get('SECRET_KEY')
 
 # database
 app.config[
-    'SQLALCHEMY_DATABASE_URI'] = 'postgres://ncgvwymqybskap:24400b07680a2084e377cc83e33716019e0379d37d7da11473b36b2363e3ea5b@ec2-54-147-126-202.compute-1.amazonaws.com:5432/db1epk59ao59ps'
+    'SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL')
 db = SQLAlchemy(app)
 
 # initialize socketio
@@ -100,4 +102,4 @@ def leave(data):
 
 
 if __name__ == '__main__':
-    socketio.run(app)
+    app.run()
